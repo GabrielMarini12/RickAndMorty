@@ -18,15 +18,14 @@ let totalPersonagens = 0;
 let totalLocation = 0;
 let totalEpisodios = 0;
 
-async function searchCharacters(evento, page) {
-  evento.preventDefault();
+async function searchCharacters(event, page) {
+  event.preventDefault();
   const inputValue = document.querySelector("input").value;
   console.log(inputValue);
 
   try {
     const params = {
       page: page,
-      perPage: 6,
     };
     const response = await axios.get(
       `https://rickandmortyapi.com/api/character/?name=${inputValue}`,
@@ -98,7 +97,6 @@ async function pegarInfoCard(page) {
   try {
     const params = {
       page: page,
-      perPage: 6,
     };
 
     const response = await api.get("/character", { params });
@@ -157,7 +155,7 @@ async function pegarInfoCard(page) {
               <p class="locale text-secondary fw-bold">Última localização conhecida</p>
               <p class="fw-bold" id="localizacao-card">${item.location.name}</p>
 
-              <button class="mt-2 px-3 py-1 text-white btn-details" onclick="openCharacterModal(${item.id})">Detalhes</button>
+              <button class="mt-2 px-3 py-1 text-white btn-details" onclick="openCharacterModal(${item.id})" >Detalhes</button>
             </div>
       `;
 
