@@ -18,6 +18,72 @@ let totalPersonagens = 0;
 let totalLocation = 0;
 let totalEpisodios = 0;
 
+async function searchCharacters(evento) {
+  evento.preventDefault();
+  const inputValue = document.querySelector("input").value;
+  console.log(inputValue);
+
+  try {
+    const response = await axios.get(
+      `https://rickandmortyapi.com/api/character/?name=${inputValue}`
+    );
+    const characters = response.data.results;
+
+    containerCards.innerHTML = "";
+    characters.map((character) => {
+      const translatedStatus =
+        character.status === "Alive"
+          ? "Vivo"
+          : character.status === "Dead"
+          ? "Morto"
+          : "Desconhecido";
+
+      const translatedSpecies =
+        character.species === "Human"
+          ? "Humano"
+          : character.species === "Alien"
+          ? "Alienígena"
+          : "Desconhecido";
+
+      const statusClass =
+        character.status === "Alive"
+          ? "status-alive"
+          : character.status === "Dead"
+          ? "status-dead"
+          : "status-unknown";
+      containerCards.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="col-xl-4 col-lg-6 col-sm-12 card-animation">
+          <div>
+              <img
+                src="${character.image}"
+                alt="Imagem de ${character.name}"
+                class="w-100 rounded-top-3 image"
+                id="image-card"
+              />
+            </div>
+            <div
+              class="d-flex flex-column py-4 px-4 border-success border-bottom border-end border-start rounded-bottom-3 items"
+            >
+              <p class="fw-bold title-card mb-1" id="title-card">${character.name}</p>
+              <p class=" status-card" id="vivo-and-morto"><span class="fw-bold status-circle ${statusClass}"></span>${translatedStatus} - ${translatedSpecies}</p>
+
+              <p class="locale text-secondary fw-bold">Última localização conhecida</p>
+              <p class="fw-bold" id="localizacao-card">${character.location.name}</p>
+
+              <button class="mt-2 px-3 py-1 text-white btn-details" onclick="openCharacterModal(${character.id})">Detalhes</button>
+            </div>
+        </div>
+        `
+      );
+      window.scrollTo(0, 0);
+    });
+  } catch (error) {
+    console.log("Erro na busca pelo personagem.");
+  }
+}
+
 async function pegarInfoCard(page) {
   try {
     const params = {

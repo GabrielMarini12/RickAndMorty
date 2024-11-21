@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Get Schwifty";
+  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/3089507/get-schwifty.woff")
+    format("woff");
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -37,6 +43,7 @@ body {
   animation-timing-function: cubic-bezier(0.65, 0.1, 0.25, 1);
   animation-delay: 0.5s;
   animation-direction: alternate;
+  font-family: "Get Schwifty";
 }
 
 @keyframes cubic-bezier-title {
