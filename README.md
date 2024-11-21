@@ -21,6 +21,12 @@ Projeto lista de personagens Rick and Morty - entrega do Módulo III Growdev
 
 ![image](https://github.com/user-attachments/assets/c60ff433-c14d-4574-b299-971fb430f37b)
 
+- 4 - Responsivo.
+
+![image](https://github.com/user-attachments/assets/d083a53b-f64a-4b6e-9c8f-e3f34257836b)
+
+![image](https://github.com/user-attachments/assets/ad5d3199-b95e-4353-9453-6d527865265a)
+
 # Características
 
 As principais características do projeto são:
