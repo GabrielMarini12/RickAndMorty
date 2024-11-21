@@ -18,16 +18,23 @@ let totalPersonagens = 0;
 let totalLocation = 0;
 let totalEpisodios = 0;
 
-async function searchCharacters(evento) {
+async function searchCharacters(evento, page) {
   evento.preventDefault();
   const inputValue = document.querySelector("input").value;
   console.log(inputValue);
 
   try {
+    const params = {
+      page: page,
+      perPage: 6,
+    };
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/?name=${inputValue}`
+      `https://rickandmortyapi.com/api/character/?name=${inputValue}`,
+      { params }
     );
     const characters = response.data.results;
+
+    totalPages = response.data.info.pages;
 
     containerCards.innerHTML = "";
     characters.map((character) => {
@@ -51,6 +58,7 @@ async function searchCharacters(evento) {
           : character.status === "Dead"
           ? "status-dead"
           : "status-unknown";
+
       containerCards.insertAdjacentHTML(
         "beforeend",
         `
@@ -77,12 +85,14 @@ async function searchCharacters(evento) {
         </div>
         `
       );
+      updatePaginationButtons();
       window.scrollTo(0, 0);
     });
   } catch (error) {
     console.log("Erro na busca pelo personagem.");
   }
 }
+searchCharacters(currentPage);
 
 async function pegarInfoCard(page) {
   try {
@@ -159,43 +169,10 @@ async function pegarInfoCard(page) {
 
       updatePaginationButtons();
     });
-
-    const cardFooter = document.createElement("div");
-    cardFooter.classList.add("d-flex");
-    cardFooter.classList.add("mt-5");
-    cardFooter.classList.add("mb-5");
-    cardFooter;
-    cardFooter.innerHTML = `
-          <p class="px-4 footer-color-escrita">
-            Personagens: <span class="text-white" id="personagens">${totalPersonagens}</span>
-          </p>
-          <p class="px-4 footer-color-escrita">
-            Localizações: <span class="text-white" id="localizacoes">${totalLocation}</span>
-          </p>
-          <p class="px-4 footer-color-escrita">
-            Episódios: <span class="text-white" id="episodios">${totalEpisodios}</span>
-          </p>
-      `;
-
-    footer.appendChild(cardFooter);
-
-    const pFooter = document.createElement("p");
-    pFooter.classList.add("d-flex");
-    pFooter.classList.add("mt-5");
-    pFooter.classList.add("mb-5");
-    pFooter.classList.add("footer-color-escrita");
-    pFooter.innerHTML = `
-       
-          Desenvolvido por <span class="text-white px-2">Gabriel Marini</span> em 2024
-        
-      `;
-
-    footer.appendChild(pFooter);
   } catch (error) {
     console.error("Erro ao buscar personagens.", error);
   }
 }
-
 pegarInfoCard(currentPage);
 
 prevPage.addEventListener("click", () => {
@@ -218,6 +195,48 @@ function updatePaginationButtons() {
   prevPage.disabled = currentPage === 1;
   nextPage.disabled = currentPage === totalPages;
 }
+
+async function criarFooter() {
+  const response = await api.get("/character");
+  const responseLocation = await api.get("/location");
+  const responseEpisode = await api.get("/episode");
+  totalPersonagens = response.data.info.count;
+  totalLocation = responseLocation.data.info.count;
+  totalEpisodios = responseEpisode.data.info.count;
+
+  const cardFooter = document.createElement("div");
+  cardFooter.classList.add("d-flex");
+  cardFooter.classList.add("mt-5");
+  cardFooter.classList.add("mb-5");
+  cardFooter;
+  cardFooter.innerHTML = `
+          <p class="px-4 footer-color-escrita">
+            Personagens: <span class="text-white" id="personagens">${totalPersonagens}</span>
+          </p>
+          <p class="px-4 footer-color-escrita">
+            Localizações: <span class="text-white" id="localizacoes">${totalLocation}</span>
+          </p>
+          <p class="px-4 footer-color-escrita">
+            Episódios: <span class="text-white" id="episodios">${totalEpisodios}</span>
+          </p>
+      `;
+
+  footer.appendChild(cardFooter);
+
+  const pFooter = document.createElement("p");
+  pFooter.classList.add("d-flex");
+  pFooter.classList.add("mt-5");
+  pFooter.classList.add("mb-5");
+  pFooter.classList.add("footer-color-escrita");
+  pFooter.innerHTML = `
+       
+          Desenvolvido por <span class="text-white px-2">Gabriel Marini</span> em 2024
+        
+      `;
+
+  footer.appendChild(pFooter);
+}
+criarFooter();
 
 async function openCharacterModal(id) {
   try {
